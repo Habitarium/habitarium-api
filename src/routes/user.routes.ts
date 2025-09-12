@@ -1,10 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { makeUserController } from "../modules/users/user.factory";
 import { zodValidator } from "../utils/guards/zod-validator";
-import {
-  createUserSchema,
-  updateUserSchema,
-} from "../modules/users/user.entity";
+import { updateUserSchema } from "../modules/users/user.entity";
 
 const userController = makeUserController();
 
@@ -17,18 +14,10 @@ export async function userRoutes(app: FastifyInstance) {
     await userController.findById(req, reply);
   });
 
-  app.post(
-    "/",
-    { preHandler: [zodValidator({ body: createUserSchema })] },
-    async (req, reply) => {
-      await userController.register(req, reply);
-    }
-  );
-
   app.put(
     "/:userId",
     {
-      preHandler: [zodValidator({ body: updateUserSchema })],
+      preHandler: [zodValidator(updateUserSchema)],
     },
     async (req, reply) => {
       await userController.update(req, reply);

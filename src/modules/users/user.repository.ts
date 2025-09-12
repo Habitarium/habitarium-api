@@ -18,7 +18,6 @@ export class UserRepository {
       })
       .from(users)
       .where(eq(users.id, userId));
-
     return result;
   }
 
@@ -27,16 +26,20 @@ export class UserRepository {
       .select()
       .from(users)
       .where(eq(users.id, userId));
-
     return result;
   }
 
-  public async findByEmail(email: string): Promise<UserEntity | undefined> {
+  public async findByEmail(email: string): Promise<UserPublic | undefined> {
     const [result] = await this.db
-      .select()
+      .select({
+        id: users.id,
+        email: users.email,
+        name: users.name,
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt,
+      })
       .from(users)
       .where(eq(users.email, email));
-
     return result;
   }
 
@@ -50,7 +53,6 @@ export class UserRepository {
         updatedAt: users.updatedAt,
       })
       .from(users);
-
     return result;
   }
 
@@ -63,8 +65,13 @@ export class UserRepository {
   }
 
   public async create(data: UserEntity): Promise<UserPublic | undefined> {
-    const [result] = await this.db.insert(users).values(data).returning();
-
+    const [result] = await this.db.insert(users).values(data).returning({
+      id: users.id,
+      email: users.email,
+      name: users.name,
+      createdAt: users.createdAt,
+      updatedAt: users.updatedAt,
+    });
     return result;
   }
 
@@ -83,7 +90,6 @@ export class UserRepository {
         createdAt: users.createdAt,
         updatedAt: users.updatedAt,
       });
-
     return result;
   }
 }

@@ -1,5 +1,5 @@
 import Fastify from "fastify";
-import { registerRoutes } from "./routes";
+import { registerRoutes } from "./routes/index.routes";
 import { fastifyErrorHandler } from "./utils/errors";
 
 async function main() {
@@ -13,15 +13,15 @@ async function main() {
   await app.register(registerRoutes, { prefix: "/api" });
 
   await app.ready();
-  app.log.info(app.printRoutes());
 
   try {
     await app.listen({ port, host });
-    app.log.info(`HTTP server on http://${host}:${port}`);
   } catch (err) {
     app.log.error(err);
     process.exit(1);
   }
+
+  console.log(app.printRoutes());
 
   const close = async () => {
     await app.close();

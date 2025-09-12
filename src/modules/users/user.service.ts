@@ -21,17 +21,14 @@ export class UserService {
 
   public async findById(id: string): Promise<UserPublic> {
     const user = await this.repo.findPublicById(id);
-
     if (!user) {
       throw new NotFoundError("User not found", { details: { id } });
     }
-
     return user;
   }
 
   public async register(data: CreateUserInput): Promise<UserPublic> {
     const existingUser = await this.repo.findByEmail(data.email);
-
     if (existingUser) {
       throw new ConflictError("Email is already registered", {
         details: { email: data.email },
@@ -39,7 +36,6 @@ export class UserService {
     }
 
     const hashedPassword = await hashPassword(data.password);
-
     const newUserEntity: UserEntity = {
       id: crypto.randomUUID(),
       name: data.name,
@@ -50,11 +46,9 @@ export class UserService {
     };
 
     const createdUser = await this.repo.create(newUserEntity);
-
     if (!createdUser) {
       throw new InternalError("Failed to create user");
     }
-
     return createdUser;
   }
 
@@ -90,11 +84,9 @@ export class UserService {
     };
 
     const updatedUser = await this.repo.update(userId, updatedEntity);
-
     if (!updatedUser) {
       throw new InternalError("Failed to update user");
     }
-
     return updatedUser;
   }
 
@@ -108,5 +100,6 @@ export class UserService {
     if (!userDeleted) {
       throw new NotFoundError("User not found");
     }
+    return;
   }
 }

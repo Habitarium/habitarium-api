@@ -24,7 +24,6 @@ export class AuthService {
         details: { email: data.email },
       });
     }
-
     const accessToken = signAccess(user);
     return { accessToken, user };
   }
@@ -34,7 +33,6 @@ export class AuthService {
     if (!verifyToken) {
       throw new AuthRequiredError();
     }
-
     return;
   }
 }
