@@ -6,7 +6,7 @@ async function main() {
   const port = Number(process.env.API_PORT ?? 3000);
   const host = process.env.API_HOST ?? "0.0.0.0";
 
-  const app = Fastify({ logger: true });
+  const app = Fastify();
 
   app.setErrorHandler(fastifyErrorHandler);
 
@@ -20,8 +20,6 @@ async function main() {
     app.log.error(err);
     process.exit(1);
   }
-
-  console.log(app.printRoutes());
 
   const close = async () => {
     await app.close();

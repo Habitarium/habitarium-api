@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { zodValidator } from "../utils/guards/zod-validator";
+import { zodValidator } from "../utils/hooks/zod-validator";
 import { createUserSchema } from "../modules/users/user.entity";
 import { makeAuthController } from "../modules/auth/auth.factory";
 import { signInSchema } from "../modules/auth/auth.entity";

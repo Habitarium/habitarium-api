@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { z } from "zod";
 import type { FastifyReply, FastifyRequest } from "fastify";
 
@@ -8,7 +7,7 @@ export function zodValidator<T extends z.ZodTypeAny>(schema: T) {
     if (!r.success) {
       return reply.status(400).send(r.error);
     }
-    (req as any).body = r.data;
+    req.body = r.data;
   };
 }
 

@@ -30,6 +30,7 @@ export class AuthController {
     if (!token) {
       throw new AuthRequiredError();
     }
+    this.service.verifyToken(token);
     return reply.status(200).send();
   }
 }
