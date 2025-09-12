@@ -2,7 +2,7 @@ import { integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { quests } from "./quests";
 import { characters } from "./characters";
 
-export const questsActivity = pgTable("quests_activity", {
+export const activityQuests = pgTable("activity_quests", {
   id: uuid("id").defaultRandom().primaryKey(),
   questId: uuid("quest_id")
     .notNull()

@@ -3,7 +3,7 @@ import { characters } from "./characters";
 import { notifications } from "./notifications";
 import { quests } from "./quests";
 import { users } from "./users";
-import { questsActivity } from "./quest-activity";
+import { activityQuests } from "./activity-quests";
 
 export const usersRelations = relations(users, ({ one }) => ({
   character: one(characters, {
@@ -18,7 +18,7 @@ export const charactersRelations = relations(characters, ({ one, many }) => ({
     references: [users.id],
   }),
   quests: many(quests),
-  questsActivity: many(questsActivity),
+  activityQuests: many(activityQuests),
   notifications: many(notifications),
 }));
 
@@ -27,16 +27,16 @@ export const questsRelations = relations(quests, ({ one, many }) => ({
     fields: [quests.characterId],
     references: [characters.id],
   }),
-  questsActivity: many(questsActivity),
+  activityQuests: many(activityQuests),
 }));
 
-export const questsActivityRelations = relations(questsActivity, ({ one }) => ({
+export const activityQuestsRelations = relations(activityQuests, ({ one }) => ({
   quest: one(quests, {
-    fields: [questsActivity.questId],
+    fields: [activityQuests.questId],
     references: [quests.id],
   }),
   character: one(characters, {
-    fields: [questsActivity.characterId],
+    fields: [activityQuests.characterId],
     references: [characters.id],
   }),
 }));
