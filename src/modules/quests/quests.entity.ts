@@ -6,9 +6,8 @@ export const createQuestSchema = z
     description: z.string("Description must be a string").optional(),
     type: z.string("Type is required"),
     difficulty: z.string("Difficulty is required"),
-    isPaused: z.boolean("isPaused must be a boolean").default(false).optional(),
-    dueDate: z.coerce.date("Invalid due date").optional(),
-    frequency: z.string("Frequency is required"),
+    dueDate: z.coerce.date("Invalid dueDate").optional(),
+    frequency: z.string("Frequency must be a string").optional(),
   })
   .strict();
 
