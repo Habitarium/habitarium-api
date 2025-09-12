@@ -1,7 +1,7 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
 import type { UserService } from "./user.service";
 import type { CreateUserInput, UpdateUserInput } from "./user.entity";
-import { assertValidUUID } from "../../shared/id-validator";
+import { assertValidUUID } from "../../utils/id-validator";
 
 export class UserController {
   constructor(private readonly service: UserService) {}

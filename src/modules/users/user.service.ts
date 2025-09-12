@@ -1,5 +1,9 @@
-import { hashPassword } from "../../shared/auth/password";
-import { ConflictError, NotFoundError } from "../../shared/errors";
+import { hashPassword } from "../../utils/auth/password";
+import {
+  ConflictError,
+  InternalError,
+  NotFoundError,
+} from "../../utils/errors";
 import type {
   CreateUserInput,
   UpdateUserInput,
@@ -15,7 +19,7 @@ export class UserService {
     return await this.repo.findAllPublic();
   }
 
-  public async findById(id: string): Promise<UserPublic | undefined> {
+  public async findById(id: string): Promise<UserPublic> {
     const user = await this.repo.findPublicById(id);
 
     if (!user) {
@@ -25,9 +29,7 @@ export class UserService {
     return user;
   }
 
-  public async register(
-    data: CreateUserInput
-  ): Promise<UserPublic | undefined> {
+  public async register(data: CreateUserInput): Promise<UserPublic> {
     const existingUser = await this.repo.findByEmail(data.email);
 
     if (existingUser) {
@@ -49,13 +51,17 @@ export class UserService {
 
     const createdUser = await this.repo.create(newUserEntity);
 
+    if (!createdUser) {
+      throw new InternalError("Failed to create user");
+    }
+
     return createdUser;
   }
 
   public async update(
     userId: string,
     input: UpdateUserInput
-  ): Promise<UserPublic | undefined> {
+  ): Promise<UserPublic> {
     const user = await this.repo.findById(userId);
     if (!user) {
       throw new NotFoundError("User not found", { details: { id: userId } });
@@ -83,7 +89,13 @@ export class UserService {
       updatedAt: new Date(),
     };
 
-    return this.repo.update(userId, updatedEntity);
+    const updatedUser = await this.repo.update(userId, updatedEntity);
+
+    if (!updatedUser) {
+      throw new InternalError("Failed to update user");
+    }
+
+    return updatedUser;
   }
 
   public async delete(userId: string): Promise<void> {

@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { makeUserController } from "../modules/users/user.factory";
-import { zodValidator } from "../shared/guards/zod-validator";
+import { zodValidator } from "../utils/guards/zod-validator";
 import {
   createUserSchema,
   updateUserSchema,
