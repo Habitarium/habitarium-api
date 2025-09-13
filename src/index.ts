@@ -9,12 +9,9 @@ async function main() {
 
   const app = Fastify();
 
-  // Registre o plugin de CORS aqui, antes das rotas
-  // Isso permite que o backend receba requisições de diferentes origens.
   await app.register(cors, {
     origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], 
-   
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   });
 
   app.setErrorHandler(fastifyErrorHandler);
