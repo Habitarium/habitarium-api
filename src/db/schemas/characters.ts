@@ -7,6 +7,9 @@ export const characters = pgTable("characters", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   profilePictureUrl: text("profile_picture_url").notNull(),
+  currentQuestlineKey: text("current_questline_key ")
+    .notNull()
+    .default("INITIAL"),
   level: integer("level").notNull().default(1),
   totalXp: integer("total_xp").notNull().default(0),
   currentStreak: integer("current_streak").notNull().default(0),

@@ -1,5 +1,4 @@
 import { eq } from "drizzle-orm";
-
 import type { Db } from "../../db";
 import { users } from "../../db/schemas/users";
 import type { UserEntity, UserPublic } from "./user.entity";

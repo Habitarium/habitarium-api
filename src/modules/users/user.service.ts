@@ -19,10 +19,10 @@ export class UserService {
     return await this.repo.findAllPublic();
   }
 
-  public async findById(id: string): Promise<UserPublic> {
-    const user = await this.repo.findPublicById(id);
+  public async findById(userId: string): Promise<UserPublic> {
+    const user = await this.repo.findPublicById(userId);
     if (!user) {
-      throw new NotFoundError("User not found", { details: { id } });
+      throw new NotFoundError("User not found", { details: { userId } });
     }
     return user;
   }
