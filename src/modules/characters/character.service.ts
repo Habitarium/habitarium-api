@@ -12,7 +12,7 @@ export class CharacterService {
   constructor(private readonly repo: CharacterRepository) {}
 
   public async findMany(): Promise<CharacterEntity[]> {
-    const characters = await this.repo.findMany();
+    const characters = await this.repo.findAll();
     return characters;
   }
 
@@ -43,7 +43,7 @@ export class CharacterService {
       throw new ConflictError("UserId is already registered");
     }
 
-    const allCharacters = await this.repo.findMany();
+    const allCharacters = await this.repo.findAll();
 
     const newCharacter: CharacterEntity = {
       id: crypto.randomUUID(),

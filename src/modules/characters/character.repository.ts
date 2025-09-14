@@ -26,7 +26,7 @@ export class CharacterRepository {
     return result;
   }
 
-  public async findMany(): Promise<CharacterEntity[]> {
+  public async findAll(): Promise<CharacterEntity[]> {
     const result = await this.db.select().from(characters);
     return result;
   }

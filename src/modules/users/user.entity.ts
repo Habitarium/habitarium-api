@@ -17,15 +17,13 @@ export type CreateUserInput = z.infer<typeof createUserSchema>;
 
 export const updateUserSchema = z
   .object({
-    id: z.uuid("Invalid id"),
+    id: z.uuid("Invalid id").optional(),
     name: z.string("Name is required").trim().min(1, "Name is required"),
     email: z.email("Invalid email"),
     password: z
       .string()
       .min(6, "Password must be at least 6 characters")
       .optional(),
-    createdAt: z.coerce.date("Invalid date").optional(),
-    updatedAt: z.coerce.date("Invalid date").optional(),
   })
   .strict();
 
