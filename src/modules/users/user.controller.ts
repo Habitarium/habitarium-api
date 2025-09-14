@@ -6,6 +6,12 @@ import { assertValidUUID } from "../../utils/uuid-validator";
 export class UserController {
   constructor(private readonly service: UserService) {}
 
+  public async findMe(req: FastifyRequest, reply: FastifyReply) {
+    const userToken = req.user!;
+    const user = await this.service.findById(userToken.id, userToken);
+    return reply.status(200).send(user);
+  }
+
   public async findById(req: FastifyRequest, reply: FastifyReply) {
     const { userId } = req.params as { userId: string };
     assertValidUUID(userId, "userId");

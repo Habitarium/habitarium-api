@@ -6,12 +6,16 @@ import { makeCharacterController } from "../modules/characters/character.factory
 const characterController = makeCharacterController();
 
 export async function characterRoutes(app: FastifyInstance) {
-  app.get("/:characterId", async (req, reply) => {
-    await characterController.findById(req, reply);
+  app.get("/me", async (req, reply) => {
+    await characterController.findMe(req, reply);
   });
 
   app.get("/user/:userId", async (req, reply) => {
     await characterController.findByUserId(req, reply);
+  });
+
+  app.get("/:characterId", async (req, reply) => {
+    await characterController.findById(req, reply);
   });
 
   app.put(

@@ -6,6 +6,10 @@ import { updateUserSchema } from "../modules/users/user.entity";
 const userController = makeUserController();
 
 export async function userRoutes(app: FastifyInstance) {
+  app.get("/me", async (req, reply) => {
+    await userController.findMe(req, reply);
+  });
+
   app.get("/:userId", async (req, reply) => {
     await userController.findById(req, reply);
   });

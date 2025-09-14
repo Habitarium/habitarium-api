@@ -16,7 +16,13 @@ export class CharacterController {
   public async findByUserId(req: FastifyRequest, reply: FastifyReply) {
     const { userId } = req.params as { userId: string };
     assertValidUUID(userId, "userId");
-    const character = await this.service.findById(userId);
+    const character = await this.service.findByUserId(userId);
+    return reply.status(200).send(character);
+  }
+
+  public async findMe(req: FastifyRequest, reply: FastifyReply) {
+    const { id } = req.user!;
+    const character = await this.service.findByUserId(id);
     return reply.status(200).send(character);
   }
 
