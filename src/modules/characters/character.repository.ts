@@ -32,13 +32,12 @@ export class CharacterRepository {
   }
 
   public async update(
-    characterId: string,
     data: CharacterEntity
   ): Promise<CharacterEntity | undefined> {
     const [result] = await this.db
       .update(characters)
       .set(data)
-      .where(eq(characters.id, characterId))
+      .where(eq(characters.id, data.id))
       .returning();
     return result;
   }

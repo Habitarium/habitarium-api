@@ -1,4 +1,11 @@
-import { boolean, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+  type AnyPgColumn,
+} from "drizzle-orm/pg-core";
 import { characters } from "./characters";
 
 export const quests = pgTable("quests", {
@@ -6,6 +13,10 @@ export const quests = pgTable("quests", {
   characterId: uuid("character_id")
     .notNull()
     .references(() => characters.id, { onDelete: "cascade" }),
+  questlineKey: text("questline_key"),
+  questlineKind: text("questline_kind"),
+  sequenceIndex: text("sequence_index"),
+  parentId: uuid("parent_id").references((): AnyPgColumn => quests.id),
   name: text("name").notNull(),
   description: text("description").notNull(),
   type: text("type").notNull(),

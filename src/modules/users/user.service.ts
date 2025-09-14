@@ -97,12 +97,13 @@ export class UserService {
     const updatedUser: UserEntity = {
       ...foundUser,
       ...data,
+      id: userId,
       passwordHash: newPasswordHash,
       createdAt: foundUser.createdAt,
       updatedAt: new Date(),
     };
 
-    const updated = await this.repo.update(userId, updatedUser);
+    const updated = await this.repo.update(updatedUser);
     if (!updated) {
       throw new InternalError("Failed to update user");
     }

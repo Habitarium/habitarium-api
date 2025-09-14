@@ -11,7 +11,28 @@ export class QuestRepository {
       .select()
       .from(quests)
       .where(eq(quests.characterId, characterId));
-
     return result;
+  }
+
+  public async create(data: QuestEntity): Promise<QuestEntity | undefined> {
+    const [result] = await this.db.insert(quests).values(data).returning();
+    return result;
+  }
+
+  public async update(data: QuestEntity): Promise<QuestEntity | undefined> {
+    const [result] = await this.db
+      .update(quests)
+      .set(data)
+      .where(eq(quests.id, data.id))
+      .returning();
+    return result;
+  }
+
+  public async delete(questId: string): Promise<boolean> {
+    const [result] = await this.db
+      .delete(quests)
+      .where(eq(quests.id, questId))
+      .returning();
+    return !!result;
   }
 }

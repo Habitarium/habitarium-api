@@ -105,7 +105,7 @@ export class CharacterService {
       ...character,
       profilePicture: data.profilePicture ?? character.profilePicture,
     };
-    const updated = await this.repo.update(characterId, updatedCharacter);
+    const updated = await this.repo.update(updatedCharacter);
     if (!updated) {
       throw new NotFoundError("Character not found");
     }

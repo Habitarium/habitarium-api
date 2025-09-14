@@ -84,14 +84,11 @@ export class UserRepository {
     return result;
   }
 
-  public async update(
-    userId: string,
-    data: UserEntity
-  ): Promise<UserPublic | undefined> {
+  public async update(data: UserEntity): Promise<UserPublic | undefined> {
     const [result] = await this.db
       .update(users)
       .set(data)
-      .where(eq(users.id, userId))
+      .where(eq(users.id, data.id))
       .returning({
         id: users.id,
         email: users.email,
