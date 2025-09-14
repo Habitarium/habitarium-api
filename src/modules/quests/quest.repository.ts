@@ -14,6 +14,14 @@ export class QuestRepository {
     return result;
   }
 
+  public async findById(questId: string): Promise<QuestEntity | undefined> {
+    const [result] = await this.db
+      .select()
+      .from(quests)
+      .where(eq(quests.id, questId));
+    return result;
+  }
+
   public async create(data: QuestEntity): Promise<QuestEntity | undefined> {
     const [result] = await this.db.insert(quests).values(data).returning();
     return result;
