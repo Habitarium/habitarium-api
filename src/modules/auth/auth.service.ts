@@ -23,12 +23,15 @@ export class AuthService {
     if (!user) {
       throw new AuthRequiredError("Invalid credentials");
     }
-    const ok = comparePassword(data.password, user.passwordHash);
+    const ok = await comparePassword(data.password, user.passwordHash);
     if (!ok) {
       throw new AuthRequiredError("Invalid credentials");
     }
-    const accessToken = signAccess(user);
-    return { accessToken, user };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { passwordHash, ...safeUser } = user;
+    const accessToken = signAccess(safeUser);
+
+    return { accessToken, user: safeUser };
   }
 
   public verifyToken(token: string): void {

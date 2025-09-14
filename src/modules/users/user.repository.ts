@@ -36,6 +36,22 @@ export class UserRepository {
     return result;
   }
 
+  public async findByEmailPublic(
+    email: string
+  ): Promise<UserPublic | undefined> {
+    const [result] = await this.db
+      .select({
+        id: users.id,
+        email: users.email,
+        name: users.name,
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt,
+      })
+      .from(users)
+      .where(eq(users.email, email));
+    return result;
+  }
+
   public async findAllPublic(): Promise<UserPublic[]> {
     const result = await this.db
       .select({
