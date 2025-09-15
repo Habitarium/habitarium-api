@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ValidationError } from "./error-handler";
+import { ValidationError } from "../error-handler";
 
 const idSchema = z.uuid();
 

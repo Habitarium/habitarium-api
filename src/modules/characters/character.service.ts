@@ -15,7 +15,7 @@ export class CharacterService {
     return Math.floor(50 * Math.pow(level, 1.5));
   }
 
-  public async findMany(): Promise<CharacterEntity[]> {
+  public async findAll(): Promise<CharacterEntity[]> {
     const characters = await this.repo.findAll();
     return characters;
   }
@@ -42,9 +42,9 @@ export class CharacterService {
 
   public async addExperienceCharacter(
     xp: number,
-    userToken: UserPublic
+    authUser: UserPublic
   ): Promise<CharacterEntity> {
-    const found = await this.findByUserId(userToken.id);
+    const found = await this.findByUserId(authUser.id);
 
     const accumulatedXp = found.totalXp + xp;
     let newLevel = found.level;
@@ -104,11 +104,11 @@ export class CharacterService {
 
   public async delete(
     characterId: string,
-    userToken: UserPublic
+    authUser: UserPublic
   ): Promise<void> {
     const character = await this.findById(characterId);
 
-    if (character.userId !== userToken.id) {
+    if (character.userId !== authUser.id) {
       throw new ForbiddenError("You are not allowed to delete this character");
     }
 
@@ -123,14 +123,14 @@ export class CharacterService {
   public async update(
     characterId: string,
     data: UpdateCharacterInput,
-    userToken: UserPublic
+    authUser: UserPublic
   ): Promise<CharacterEntity> {
     const character = await this.repo.findById(characterId);
     if (!character) {
       throw new NotFoundError("Character not found");
     }
 
-    if (character.userId !== userToken.id) {
+    if (character.userId !== authUser.id) {
       throw new ForbiddenError("You are not allowed to update this character");
     }
 

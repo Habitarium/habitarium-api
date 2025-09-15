@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, and, gte, lte } from "drizzle-orm";
 import type { Db } from "../../db";
 import { activities } from "../../db/schemas/activities";
 import type { ActivityEntity } from "./activity.entity";
@@ -11,6 +11,23 @@ export class ActivityRepository {
       .select()
       .from(activities)
       .where(eq(activities.characterId, characterId));
+    return result;
+  }
+
+  public async getActivitiesBetweenDates(
+    data: { startAt: Date; endAt: Date },
+    characterId: string
+  ): Promise<ActivityEntity[]> {
+    const result = await this.db
+      .select()
+      .from(activities)
+      .where(
+        and(
+          eq(activities.characterId, characterId),
+          gte(activities.closedAt, data.startAt),
+          lte(activities.closedAt, data.endAt)
+        )
+      );
     return result;
   }
 

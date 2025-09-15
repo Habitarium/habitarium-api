@@ -1,5 +1,5 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
-import { assertValidUUID } from "../../utils/uuid-validator";
+import { assertValidUUID } from "../../utils/validators/uuid-validator";
 import type { CharacterService } from "./character.service";
 import type { UpdateCharacterInput } from "./character.entity";
 
@@ -29,17 +29,17 @@ export class CharacterController {
   public async update(req: FastifyRequest, reply: FastifyReply) {
     const { characterId } = req.params as { characterId: string };
     assertValidUUID(characterId, "characterId");
-    const userToken = req.user!;
+    const authUser = req.user!;
     const data = req.body as UpdateCharacterInput;
-    const user = await this.service.update(characterId, data, userToken);
+    const user = await this.service.update(characterId, data, authUser);
     return reply.status(200).send(user);
   }
 
   public async delete(req: FastifyRequest, reply: FastifyReply) {
     const { characterId } = req.params as { characterId: string };
     assertValidUUID(characterId, "characterId");
-    const userToken = req.user!;
-    await this.service.delete(characterId, userToken);
+    const authUser = req.user!;
+    await this.service.delete(characterId, authUser);
     return reply.status(204).send();
   }
 }

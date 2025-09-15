@@ -24,9 +24,9 @@ export class UserService {
 
   public async findById(
     userId: string,
-    userToken: UserPublic
+    authUser: UserPublic
   ): Promise<UserPublic> {
-    if (userId !== userToken.id) {
+    if (userId !== authUser.id) {
       throw new ForbiddenError("You are not allowed to get this user");
     }
 
@@ -67,9 +67,9 @@ export class UserService {
   public async update(
     userId: string,
     data: UpdateUserInput,
-    userToken: UserPublic
+    authUser: UserPublic
   ): Promise<UserPublic> {
-    if (userId !== userToken.id || userId !== data.id) {
+    if (userId !== authUser.id || userId !== data.id) {
       throw new ForbiddenError("You are not allowed to update this user");
     }
 
@@ -110,8 +110,8 @@ export class UserService {
     return updated;
   }
 
-  public async delete(userId: string, userToken: UserPublic): Promise<void> {
-    if (userId !== userToken.id) {
+  public async delete(userId: string, authUser: UserPublic): Promise<void> {
+    if (userId !== authUser.id) {
       throw new ForbiddenError("You are not allowed to delete this user");
     }
 

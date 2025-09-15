@@ -5,42 +5,45 @@ import type { CreateQuestInput } from "./quest.entity";
 export class QuestController {
   constructor(private readonly service: QuestService) {}
 
-  public async findAll(req: FastifyRequest, reply: FastifyReply) {
-    const userToken = req.user!;
-    const quests = await this.service.findAll(userToken);
+  public async findQuestsByCharacter(req: FastifyRequest, reply: FastifyReply) {
+    const authUser = req.user!;
+    const quests = await this.service.findQuestsByCharacter(authUser);
     return reply.status(200).send(quests);
   }
 
   public async findById(req: FastifyRequest, reply: FastifyReply) {
     const { questId } = req.params as { questId: string };
-    const userToken = req.user!;
-    const quest = await this.service.findById(questId, userToken);
+    const authUser = req.user!;
+    const quest = await this.service.findById(questId, authUser);
     return reply.status(200).send(quest);
   }
 
   public async create(req: FastifyRequest, reply: FastifyReply) {
     const data = req.body as CreateQuestInput;
-    const userToken = req.user!;
-    const quest = await this.service.create(data, userToken);
+    const authUser = req.user!;
+    const quest = await this.service.create(data, authUser);
     return reply.status(201).send(quest);
   }
 
   public async update(req: FastifyRequest, reply: FastifyReply) {
     const data = req.body as CreateQuestInput;
-    const userToken = req.user!;
-    const quest = await this.service.create(data, userToken);
+    const authUser = req.user!;
+    const quest = await this.service.create(data, authUser);
     return reply.status(200).send(quest);
   }
 
   public async delete(req: FastifyRequest, reply: FastifyReply) {
     const { questId } = req.params as { questId: string };
-    const userToken = req.user!;
-    await this.service.delete(questId, userToken);
+    const authUser = req.user!;
+    await this.service.delete(questId, authUser);
     return reply.status(204).send();
   }
 
-  public async findQuestline(_req: FastifyRequest, reply: FastifyReply) {
-    const quests = await this.service.findQuestline();
+  public async findQuestsByQuestline(
+    _req: FastifyRequest,
+    reply: FastifyReply
+  ) {
+    const quests = await this.service.findQuestsByQuestline();
     return reply.status(204).send(quests);
   }
 }

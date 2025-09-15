@@ -18,17 +18,17 @@ export class NotificationService {
     private readonly characterService: CharacterService
   ) {}
 
-  public async findAll(userToken: UserPublic): Promise<NotificationEntity[]> {
-    const character = await this.characterService.findByUserId(userToken.id);
+  public async findAll(authUser: UserPublic): Promise<NotificationEntity[]> {
+    const character = await this.characterService.findByUserId(authUser.id);
     const notifications = await this.repo.findAll(character.id);
     return notifications;
   }
 
   public async findById(
     notificationId: string,
-    userToken: UserPublic
+    authUser: UserPublic
   ): Promise<NotificationEntity> {
-    const character = await this.characterService.findByUserId(userToken.id);
+    const character = await this.characterService.findByUserId(authUser.id);
     const notification = await this.repo.findById(notificationId);
     if (!notification) {
       throw new NotFoundError("Notification not found", {
@@ -45,9 +45,9 @@ export class NotificationService {
 
   public async create(
     data: CreateNotificationInput,
-    userToken: UserPublic
+    authUser: UserPublic
   ): Promise<NotificationEntity> {
-    const character = await this.characterService.findByUserId(userToken.id);
+    const character = await this.characterService.findByUserId(authUser.id);
 
     const newNotification: NotificationEntity = {
       id: crypto.randomUUID(),
@@ -71,7 +71,7 @@ export class NotificationService {
   public async update(
     notificationId: string,
     data: UpdateNotificationInput,
-    userToken: UserPublic
+    authUser: UserPublic
   ): Promise<NotificationEntity> {
     if (notificationId !== data.id) {
       throw new ForbiddenError(
@@ -79,7 +79,7 @@ export class NotificationService {
       );
     }
 
-    const found = await this.findById(data.id, userToken);
+    const found = await this.findById(data.id, authUser);
     const updatedNotification: NotificationEntity = {
       ...found,
       ...data,
@@ -95,9 +95,9 @@ export class NotificationService {
 
   public async delete(
     notificationId: string,
-    userToken: UserPublic
+    authUser: UserPublic
   ): Promise<void> {
-    await this.findById(notificationId, userToken);
+    await this.findById(notificationId, authUser);
 
     const deleted = await this.repo.delete(notificationId);
     if (!deleted) {

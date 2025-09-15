@@ -21,17 +21,19 @@ export class QuestService {
     private readonly characterService: CharacterService
   ) {}
 
-  public async findAll(userToken: UserPublic): Promise<QuestEntity[]> {
-    const character = await this.characterService.findByUserId(userToken.id);
-    const quests = await this.repo.findAll(character.id);
+  public async findQuestsByCharacter(
+    authUser: UserPublic
+  ): Promise<QuestEntity[]> {
+    const character = await this.characterService.findByUserId(authUser.id);
+    const quests = await this.repo.findQuestsByCharacter(character.id);
     return quests;
   }
 
   public async findById(
     questId: string,
-    userToken: UserPublic
+    authUser: UserPublic
   ): Promise<QuestEntity> {
-    const character = await this.characterService.findByUserId(userToken.id);
+    const character = await this.characterService.findByUserId(authUser.id);
     const quest = await this.repo.findById(questId);
     if (!quest || character.id !== quest.characterId) {
       throw new NotFoundError("Quest not found", {
@@ -43,9 +45,9 @@ export class QuestService {
 
   public async create(
     data: CreateQuestInput,
-    userToken: UserPublic
+    authUser: UserPublic
   ): Promise<QuestEntity> {
-    const character = await this.characterService.findByUserId(userToken.id);
+    const character = await this.characterService.findByUserId(authUser.id);
 
     const newQuest: QuestEntity = {
       ...data,
@@ -75,13 +77,13 @@ export class QuestService {
   public async update(
     questId: string,
     data: UpdateQuestInput,
-    userToken: UserPublic
+    authUser: UserPublic
   ): Promise<QuestEntity> {
     if (questId !== data.id) {
       throw new ForbiddenError("You are not allowed to update this quest");
     }
 
-    const found = await this.findById(questId, userToken);
+    const found = await this.findById(questId, authUser);
     const updatedQuest: QuestEntity = {
       ...found,
       ...data,
@@ -102,8 +104,8 @@ export class QuestService {
     return quest;
   }
 
-  public async delete(questId: string, userToken: UserPublic): Promise<void> {
-    await this.findById(questId, userToken);
+  public async delete(questId: string, authUser: UserPublic): Promise<void> {
+    await this.findById(questId, authUser);
 
     const quest = await this.repo.delete(questId);
     if (!quest) {
@@ -113,8 +115,8 @@ export class QuestService {
     return;
   }
 
-  public async findQuestline(): Promise<QuestEntity[]> {
-    const quests = await this.repo.findQuestline();
+  public async findQuestsByQuestline(): Promise<QuestEntity[]> {
+    const quests = await this.repo.findQuestsByQuestline();
     return quests;
   }
 }

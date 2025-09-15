@@ -1,4 +1,4 @@
-import { eq, isNotNull } from "drizzle-orm";
+import { eq, isNotNull, isNull, and } from "drizzle-orm";
 import type { Db } from "../../db";
 import { quests } from "../../db/schemas/quests";
 import type { QuestEntity } from "./quest.entity";
@@ -6,19 +6,29 @@ import type { QuestEntity } from "./quest.entity";
 export class QuestRepository {
   constructor(private readonly db: Db) {}
 
-  public async findAll(characterId: string): Promise<QuestEntity[]> {
+  public async findQuestsByCharacter(
+    characterId: string
+  ): Promise<QuestEntity[]> {
     const result = await this.db
       .select()
       .from(quests)
-      .where(eq(quests.characterId, characterId));
+      .where(and(eq(quests.characterId, characterId), isNull(quests.parentId)));
     return result;
   }
 
-  public async findQuestline(): Promise<QuestEntity[]> {
+  public async findQuestsByQuestline(): Promise<QuestEntity[]> {
     const result = await this.db
       .select()
       .from(quests)
-      .where(isNotNull(quests.questlineKey));
+      .where(and(isNotNull(quests.questlineKey), isNull(quests.parentId)));
+    return result;
+  }
+
+  public async findChildQuests(questId: string): Promise<QuestEntity[]> {
+    const result = await this.db
+      .select()
+      .from(quests)
+      .where(eq(quests.parentId, questId));
     return result;
   }
 

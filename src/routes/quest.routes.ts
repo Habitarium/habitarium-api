@@ -10,11 +10,11 @@ const questController = makeQuestController();
 
 export async function questRoutes(app: FastifyInstance) {
   app.get("/", async (req, reply) => {
-    await questController.findAll(req, reply);
+    await questController.findQuestsByQuestline(req, reply);
   });
 
   app.get("/questline", async (req, reply) => {
-    await questController.findQuestline(req, reply);
+    await questController.findQuestsByQuestline(req, reply);
   });
 
   app.get("/:questId", async (req, reply) => {
