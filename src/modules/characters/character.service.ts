@@ -11,6 +11,10 @@ import type { CharacterRepository } from "./character.repository";
 export class CharacterService {
   constructor(private readonly repo: CharacterRepository) {}
 
+  private getRequiredXp(level: number): number {
+    return Math.floor(50 * Math.pow(level, 1.5));
+  }
+
   public async findMany(): Promise<CharacterEntity[]> {
     const characters = await this.repo.findAll();
     return characters;
@@ -34,6 +38,34 @@ export class CharacterService {
       });
     }
     return character;
+  }
+
+  public async addExperienceCharacter(
+    xp: number,
+    userToken: UserPublic
+  ): Promise<CharacterEntity> {
+    const found = await this.findByUserId(userToken.id);
+
+    const accumulatedXp = found.totalXp + xp;
+    let newLevel = found.level;
+
+    while (accumulatedXp >= this.getRequiredXp(newLevel + 1)) {
+      newLevel++;
+    }
+
+    const updatedCharacter: CharacterEntity = {
+      ...found,
+      totalXp: accumulatedXp,
+      updatedAt: new Date(),
+      level: newLevel,
+    };
+
+    const updated = await this.repo.update(updatedCharacter);
+    if (!updated) {
+      throw new DatabaseError("Failed to persist character update");
+    }
+
+    return updated;
   }
 
   public async create(user: UserPublic): Promise<CharacterEntity> {

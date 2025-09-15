@@ -62,7 +62,6 @@ export class ActivityService {
     const found = await this.findById(activityId, userToken);
 
     const now = new Date();
-
     let status: ActivityStatus;
     if (found.closedAt >= now) {
       status = ActivityStatus.COMPLETED;
@@ -80,6 +79,11 @@ export class ActivityService {
     if (!quest) {
       throw new DatabaseError("Failed to persist activity complete");
     }
+
+    await this.characterService.addExperienceCharacter(
+      found.xpEarned,
+      userToken
+    );
 
     return quest;
   }
