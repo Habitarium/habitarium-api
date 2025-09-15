@@ -94,7 +94,6 @@ export class CharacterService {
     userToken: UserPublic
   ): Promise<CharacterEntity> {
     const character = await this.repo.findById(characterId);
-
     if (!character) {
       throw new NotFoundError("Character not found");
     }
