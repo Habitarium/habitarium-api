@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, isNotNull } from "drizzle-orm";
 import type { Db } from "../../db";
 import { quests } from "../../db/schemas/quests";
 import type { QuestEntity } from "./quest.entity";
@@ -11,6 +11,14 @@ export class QuestRepository {
       .select()
       .from(quests)
       .where(eq(quests.characterId, characterId));
+    return result;
+  }
+
+  public async findQuestline(): Promise<QuestEntity[]> {
+    const result = await this.db
+      .select()
+      .from(quests)
+      .where(isNotNull(quests.questlineKey));
     return result;
   }
 

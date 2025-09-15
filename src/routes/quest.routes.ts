@@ -10,6 +10,10 @@ export async function questRoutes(app: FastifyInstance) {
     await questController.findAll(req, reply);
   });
 
+  app.get("/questline", async (req, reply) => {
+    await questController.findQuestline(req, reply);
+  });
+
   app.get("/:questId", async (req, reply) => {
     await questController.findById(req, reply);
   });

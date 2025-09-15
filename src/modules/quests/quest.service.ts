@@ -104,11 +104,17 @@ export class QuestService {
 
   public async delete(questId: string, userToken: UserPublic): Promise<void> {
     await this.findById(questId, userToken);
+
     const quest = await this.repo.delete(questId);
     if (!quest) {
       throw new DatabaseError("Failed to persist quest delete");
     }
 
     return;
+  }
+
+  public async findQuestline(): Promise<QuestEntity[]> {
+    const quests = await this.repo.findQuestline();
+    return quests;
   }
 }

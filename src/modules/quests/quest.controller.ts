@@ -38,4 +38,9 @@ export class QuestController {
     await this.service.delete(questId, userToken);
     return reply.status(204).send();
   }
+
+  public async findQuestline(_req: FastifyRequest, reply: FastifyReply) {
+    const quests = await this.service.findQuestline();
+    return reply.status(204).send(quests);
+  }
 }
