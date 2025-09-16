@@ -302,6 +302,6 @@ export function fastifyErrorHandler(
   reply: FastifyReply
 ) {
   req.log.error({ err }, "Unhandled error");
-
+  console.error(err);
   return sendError(reply, err);
 }

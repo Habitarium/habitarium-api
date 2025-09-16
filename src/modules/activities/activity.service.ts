@@ -12,8 +12,14 @@ export class ActivityService {
   constructor(
     private readonly repo: ActivityRepository,
     private readonly characterService: CharacterService,
-    private readonly questService: QuestService
+    private readonly questService: () => QuestService
   ) {}
+
+  public async findAll(authUser: UserPublic): Promise<ActivityEntity[]> {
+    const character = await this.characterService.findByUserId(authUser.id);
+    const activities = await this.repo.findAll(character.id);
+    return activities;
+  }
 
   public async findById(
     activityId: string,
@@ -31,15 +37,22 @@ export class ActivityService {
     return activity;
   }
 
+  public async findByQuestId(authUser: UserPublic): Promise<ActivityEntity[]> {
+    const character = await this.characterService.findByUserId(authUser.id);
+    const activities = await this.repo.findAll(character.id);
+    return activities;
+  }
+
   public async getActivitiesBetweenDates(
     range: { startAt: Date; endAt: Date },
     authUser: UserPublic
   ): Promise<ActivityWithVirtual[]> {
     const character = await this.characterService.findById(authUser.id);
+    const qs = this.questService();
 
     const characterQuests = [
-      ...(await this.questService.findQuestsByCharacter(authUser)),
-      ...(await this.questService.findQuestsByQuestline()),
+      ...(await qs.findQuestsByCharacter(authUser)),
+      ...(await qs.findQuestsByQuestline()),
     ];
 
     const activitiesFromDatabase = await this.repo.getActivitiesBetweenDates(
@@ -96,7 +109,9 @@ export class ActivityService {
     authUser: UserPublic
   ): Promise<ActivityEntity> {
     const character = await this.characterService.findByUserId(authUser.id);
-    const quest = await this.questService.findById(data.questId, authUser);
+
+    const qs = this.questService();
+    const quest = await qs.findById(data.questId, authUser);
 
     const newActivity: ActivityEntity = {
       id: crypto.randomUUID(),

@@ -1,6 +1,7 @@
 import type { InferSelectModel } from "drizzle-orm";
 import z from "zod";
 import type { quests } from "../../db/schemas/quests";
+import type { ActivityStatus } from "../activities/activity.entity";
 
 export enum QuestFrequency {
   DAILY = "DAILY",
@@ -49,4 +50,6 @@ export const updateQuestSchema = z
 
 export type UpdateQuestInput = z.infer<typeof updateQuestSchema>;
 
-export type QuestEntity = InferSelectModel<typeof quests>;
+export type QuestEntity = InferSelectModel<typeof quests> & {
+  status?: ActivityStatus;
+};

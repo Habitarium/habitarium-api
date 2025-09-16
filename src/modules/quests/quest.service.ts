@@ -3,6 +3,7 @@ import {
   ForbiddenError,
   NotFoundError,
 } from "../../utils/error-handler";
+import { ActivityStatus } from "../activities/activity.entity";
 import type { ActivityService } from "../activities/activity.service";
 import type { CharacterService } from "../characters/character.service";
 import type { UserPublic } from "../users/user.entity";
@@ -28,7 +29,18 @@ export class QuestService {
   ): Promise<QuestEntity[]> {
     const character = await this.characterService.findByUserId(authUser.id);
     const quests = await this.repo.findQuestsByCharacter(character.id);
-    return quests;
+    const activities = await this.activityService.findAll(authUser);
+
+    const activityByQuestId = new Map(activities.map((a) => [a.questId, a]));
+
+    const questsWithStatus = quests.map((quest) => ({
+      ...quest,
+      status:
+        (activityByQuestId.get(quest.id)?.status as ActivityStatus) ??
+        ActivityStatus.PENDING,
+    }));
+
+    return questsWithStatus;
   }
 
   public async findById(
@@ -46,6 +58,7 @@ export class QuestService {
         details: { questId },
       });
     }
+    
     return quest;
   }
 
