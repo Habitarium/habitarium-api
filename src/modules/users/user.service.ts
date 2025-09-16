@@ -69,7 +69,7 @@ export class UserService {
     data: UpdateUserInput,
     authUser: UserPublic
   ): Promise<UserPublic> {
-    if (userId !== authUser.id || userId !== data.id) {
+    if (userId !== authUser.id) {
       throw new ForbiddenError("You are not allowed to update this user");
     }
 

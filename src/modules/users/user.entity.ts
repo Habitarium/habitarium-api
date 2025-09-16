@@ -17,7 +17,6 @@ export type CreateUserInput = z.infer<typeof createUserSchema>;
 
 export const updateUserSchema = z
   .object({
-    id: z.uuid("Invalid id"),
     name: z
       .string("Name is required")
       .trim()

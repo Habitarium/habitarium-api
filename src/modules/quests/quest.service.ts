@@ -1,8 +1,4 @@
-import {
-  DatabaseError,
-  ForbiddenError,
-  NotFoundError,
-} from "../../utils/error-handler";
+import { DatabaseError, NotFoundError } from "../../utils/error-handler";
 import { ActivityStatus } from "../activities/activity.entity";
 import type { ActivityService } from "../activities/activity.service";
 import type { CharacterService } from "../characters/character.service";
@@ -58,7 +54,7 @@ export class QuestService {
         details: { questId },
       });
     }
-    
+
     return quest;
   }
 
@@ -114,10 +110,6 @@ export class QuestService {
     data: UpdateQuestInput,
     authUser: UserPublic
   ): Promise<QuestEntity> {
-    if (questId !== data.id) {
-      throw new ForbiddenError("You are not allowed to update this quest");
-    }
-
     const found = await this.findById(questId, authUser);
     const updatedQuest: QuestEntity = {
       ...found,

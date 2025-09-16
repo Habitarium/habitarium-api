@@ -37,7 +37,6 @@ export type CreateQuestInput = z.infer<typeof createQuestSchema>;
 
 export const updateQuestSchema = z
   .object({
-    id: z.uuid("Invalid id"),
     name: z.string("Name must be a string").optional(),
     icon: z.string().optional(),
     description: z.string("Description must be a string").optional(),
