@@ -47,6 +47,15 @@ export class QuestService {
     return quest;
   }
 
+  public async findByParentId(
+    questId: string,
+    authUser: UserPublic
+  ): Promise<QuestEntity[]> {
+    await this.findById(questId, authUser);
+    const quests = await this.repo.findChildQuests(questId);
+    return quests;
+  }
+
   public async create(
     data: CreateQuestInput,
     authUser: UserPublic
@@ -63,6 +72,8 @@ export class QuestService {
       questlineKind: null,
       sequenceIndex: null,
       isPaused: false,
+      content: null,
+      icon: data.icon ?? null,
       type: data.type as QuestType,
       parentId: data.parentId ?? null,
       description: data.description ?? null,
@@ -92,6 +103,7 @@ export class QuestService {
       ...found,
       ...data,
       name: data.name ?? found.name,
+      icon: data.icon ?? found.icon,
       description: data.description ?? found.description,
       difficulty: (data.difficulty as QuestDifficulty) ?? found.difficulty,
       dueDate: data.dueDate ?? found.dueDate,

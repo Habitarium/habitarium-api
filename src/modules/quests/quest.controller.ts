@@ -18,6 +18,13 @@ export class QuestController {
     return reply.status(200).send(quest);
   }
 
+  public async findByParentId(req: FastifyRequest, reply: FastifyReply) {
+    const { questId } = req.params as { questId: string };
+    const authUser = req.user!;
+    const quest = await this.service.findByParentId(questId, authUser);
+    return reply.status(200).send(quest);
+  }
+
   public async create(req: FastifyRequest, reply: FastifyReply) {
     const data = req.body as CreateQuestInput;
     const authUser = req.user!;

@@ -4,7 +4,7 @@ import z from "zod";
 
 export const updateCharacterSchema = z
   .object({
-    profilePicture: z.string().optional(),
+    avatar: z.string().optional(),
     nickname: z.string().optional(),
   })
   .strict();

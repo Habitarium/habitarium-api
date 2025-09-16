@@ -1,5 +1,6 @@
 import {
   boolean,
+  json,
   pgEnum,
   pgTable,
   text,
@@ -35,6 +36,8 @@ export const quests = pgTable("quests", {
   sequenceIndex: text("sequence_index"),
   parentId: uuid("parent_id").references((): AnyPgColumn => quests.id),
   name: text("name").notNull(),
+  icon: text("icon"),
+  content: json("content"),
   description: text("description"),
   type: questTypeEnum("type").notNull(),
   difficulty: questDifficultyEnum("difficulty").notNull(),

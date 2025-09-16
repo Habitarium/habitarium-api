@@ -79,7 +79,7 @@ export class CharacterService {
 
     const newCharacter: CharacterEntity = {
       id: crypto.randomUUID(),
-      profilePicture: "INITIAL",
+      avatar: "INITIAL",
       nickname: user.name,
       currentQuestlineKey: "INITIAL",
       lastQuestCompletedAt: new Date(),
@@ -136,7 +136,7 @@ export class CharacterService {
 
     const updatedCharacter: CharacterEntity = {
       ...character,
-      profilePicture: data.profilePicture ?? character.profilePicture,
+      avatar: data.avatar ?? character.avatar,
     };
 
     const updated = await this.repo.update(updatedCharacter);

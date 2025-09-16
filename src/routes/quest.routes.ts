@@ -17,6 +17,10 @@ export async function questRoutes(app: FastifyInstance) {
     await questController.findQuestsByQuestline(req, reply);
   });
 
+  app.get("/parent/:questId", async (req, reply) => {
+    await questController.findById(req, reply);
+  });
+
   app.get("/:questId", async (req, reply) => {
     await questController.findById(req, reply);
   });

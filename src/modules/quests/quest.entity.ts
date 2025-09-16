@@ -27,6 +27,7 @@ export const createQuestSchema = z
     description: z.string("Description must be a string").optional(),
     type: z.enum(QuestType),
     difficulty: z.enum(QuestDifficulty),
+    icon: z.string().optional(),
     dueDate: z.coerce.date("Invalid dueDate").optional(),
     frequency: z.enum(QuestFrequency),
     parentId: z.uuid("Invalid parentId").optional(),
@@ -39,6 +40,7 @@ export const updateQuestSchema = z
   .object({
     id: z.uuid("Invalid id"),
     name: z.string("Name must be a string").optional(),
+    icon: z.string().optional(),
     description: z.string("Description must be a string").optional(),
     difficulty: z.string("Difficulty must be a string").optional(),
     isPaused: z.boolean("isPaused must be a boolean").optional(),
