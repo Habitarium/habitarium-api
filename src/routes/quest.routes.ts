@@ -13,13 +13,29 @@ export async function questRoutes(app: FastifyInstance) {
     await questController.findQuestsByCharacter(req, reply);
   });
 
-  app.get("/questline", async (req, reply) => {
-    await questController.findQuestsByQuestline(req, reply);
-  });
+  app.get(
+    "/questline",
+    {
+      config: {
+        isPublic: true,
+      },
+    },
+    async (req, reply) => {
+      await questController.findQuestsByQuestline(req, reply);
+    },
+  );
 
-  app.get("/questline/:lessonId", async (req, reply) => {
-    await questController.findLessonById(req, reply);
-  });
+  app.get(
+    "/questline/:lessonId",
+    {
+      config: {
+        isPublic: true,
+      },
+    },
+    async (req, reply) => {
+      await questController.findLessonById(req, reply);
+    },
+  );
 
   app.get("/parent/:questId", async (req, reply) => {
     await questController.findById(req, reply);
