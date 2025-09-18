@@ -27,6 +27,7 @@ export const lessons = pgTable("lessons", {
   difficulty: text("difficulty").notNull(),
   icon: text("icon"),
   content: json("content"),
+  sequenceIndex: integer("sequence_index").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
