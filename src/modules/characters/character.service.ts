@@ -40,6 +40,12 @@ export class CharacterService {
     return character;
   }
 
+  public async findLessonProgress(authUser: UserPublic) {
+    const character = await this.findByUserId(authUser.id);
+    const progress = await this.repo.findLessonProgress(character.id);
+    return progress;
+  }
+
   public async addExperienceCharacter(
     xp: number,
     authUser: UserPublic
@@ -98,6 +104,8 @@ export class CharacterService {
     if (!created) {
       throw new DatabaseError("Failed to persist character create");
     }
+
+    await this.repo.createInitialLessonProgress(created.id);
 
     return created;
   }

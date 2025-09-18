@@ -10,6 +10,10 @@ export async function characterRoutes(app: FastifyInstance) {
     await characterController.findMe(req, reply);
   });
 
+  app.get("/me/lessons-progress", async (req, reply) => {
+    await characterController.findLessonProgress(req, reply);
+  });
+
   app.get("/user/:userId", async (req, reply) => {
     await characterController.findByUserId(req, reply);
   });

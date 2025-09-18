@@ -26,6 +26,12 @@ export class CharacterController {
     return reply.status(200).send(character);
   }
 
+  public async findLessonProgress(req: FastifyRequest, reply: FastifyReply) {
+    const authUser = req.user!;
+    const progress = await this.service.findLessonProgress(authUser);
+    return reply.status(200).send(progress);
+  }
+
   public async update(req: FastifyRequest, reply: FastifyReply) {
     const { characterId } = req.params as { characterId: string };
     assertValidUUID(characterId, "characterId");
