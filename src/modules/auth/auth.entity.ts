@@ -14,6 +14,6 @@ export type SignInInput = z.infer<typeof signInSchema>;
 
 export type AuthResponse = {
   accessToken: string;
-  refreshToken?: string;
+  refreshToken: string;
   user: UserPublic;
 };

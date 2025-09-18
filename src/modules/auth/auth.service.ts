@@ -15,7 +15,8 @@ export class AuthService {
   public async signUp(data: CreateUserInput): Promise<AuthResponse> {
     const createdUser = await this.userService.create(data);
     const accessToken = signAccess(createdUser.user);
-    return { accessToken, user: createdUser.user };
+    const refreshToken = signAccess(createdUser.user);
+    return { accessToken, refreshToken, user: createdUser.user };
   }
 
   public async signIn(data: SignInInput): Promise<AuthResponse> {
@@ -30,8 +31,8 @@ export class AuthService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { passwordHash, ...safeUser } = user;
     const accessToken = signAccess(safeUser);
-
-    return { accessToken, user: safeUser };
+    const refreshToken = signAccess(safeUser);
+    return { accessToken, refreshToken, user: safeUser };
   }
 
   public verifyToken(token: string): void {

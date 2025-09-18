@@ -11,13 +11,19 @@ declare module "fastify" {
   interface FastifyRequest {
     user?: UserPublic;
   }
+  interface FastifyContextConfig {
+    isPublic?: boolean;
+  }
 }
 
 export function verifyAuth(
   req: FastifyRequest,
   _reply: FastifyReply,
-  done: HookHandlerDoneFunction
+  done: HookHandlerDoneFunction,
 ) {
+  if (req.routeOptions.config?.isPublic) {
+    return done();
+  }
   try {
     const bearerToken = req.headers.authorization?.split(" ")[1];
     if (!bearerToken) throw new AuthRequiredError();
