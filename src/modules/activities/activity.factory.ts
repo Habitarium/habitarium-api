@@ -10,8 +10,8 @@ import { ActivityService } from "./activity.service";
 export function makeActivityController() {
   const repo = new ActivityRepository(db);
   const characterRepo = new CharacterRepository(db);
-  const characterService = new CharacterService(characterRepo);
   const questRepo = new QuestRepository(db);
+  const characterService = new CharacterService(characterRepo, questRepo);
   const questService = new QuestService(questRepo, characterService);
   const service = new ActivityService(repo, characterService, questService);
   return new ActivityController(service);
