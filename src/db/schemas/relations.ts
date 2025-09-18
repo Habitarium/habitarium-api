@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import { characters } from "./characters";
 import { notifications } from "./notifications";
 import { quests } from "./quests";
+import { lessons, lessonsProgress, questlines } from "./questline";
 import { users } from "./users";
 import { activities } from "./activities";
 
@@ -47,3 +48,28 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
     references: [characters.id],
   }),
 }));
+
+export const questlinesRelations = relations(questlines, ({ many }) => ({
+  lessons: many(lessons),
+}));
+
+export const lessonsRelations = relations(lessons, ({ one }) => ({
+  questline: one(questlines, {
+    fields: [lessons.questlineId],
+    references: [questlines.id],
+  }),
+}));
+
+export const lessonsProgressRelations = relations(
+  lessonsProgress,
+  ({ one }) => ({
+    lesson: one(lessons, {
+      fields: [lessonsProgress.lessonId],
+      references: [lessons.id],
+    }),
+    character: one(characters, {
+      fields: [lessonsProgress.characterId],
+      references: [characters.id],
+    }),
+  })
+);
