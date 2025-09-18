@@ -15,7 +15,7 @@ export async function userRoutes(app: FastifyInstance) {
   });
 
   app.put(
-    "/:userId",
+    "/me",
     {
       preHandler: [zodValidator(updateUserSchema)],
     },
@@ -24,7 +24,7 @@ export async function userRoutes(app: FastifyInstance) {
     }
   );
 
-  app.delete("/:userId", async (req, reply) => {
+  app.delete("/me", async (req, reply) => {
     await userController.delete(req, reply);
   });
 }
