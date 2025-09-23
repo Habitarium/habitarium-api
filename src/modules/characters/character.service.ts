@@ -8,6 +8,7 @@ import type { UserPublic } from "../users/user.entity";
 import type { CharacterEntity, UpdateCharacterInput } from "./character.entity";
 import type { CharacterRepository } from "./character.repository";
 import type { QuestRepository } from "../quests/quest.repository";
+import type { lessonsProgress } from "../../db/schemas/questline";
 
 export class CharacterService {
   constructor(
@@ -50,21 +51,70 @@ export class CharacterService {
     return progress;
   }
 
+  public async completeLesson(lessonId: string, authUser: UserPublic) {
+    const character = await this.findByUserId(authUser.id);
+    const lessonProgress = await this.repo.findLessonProgressByLessonId(
+      character.id,
+      lessonId
+    );
+
+    if (!lessonProgress) {
+      throw new NotFoundError("Lesson progress not found");
+    }
+
+    if (lessonProgress.locked) {
+      throw new ForbiddenError("This lesson is locked");
+    }
+
+    if (lessonProgress.completed) {
+      return lessonProgress;
+    }
+
+    const lesson = await this.questRepo.findLessonById(lessonId);
+    if (!lesson) {
+      throw new NotFoundError("Lesson not found");
+    }
+
+    await this.addExperienceCharacter(lesson.xp, authUser);
+
+    const updatedLp = await this.repo.updateLessonProgress(lessonProgress.id, {
+      completed: true,
+      progress: 100,
+    });
+
+    const nextLesson = await this.questRepo.findNextLesson(
+      lesson.questlineId,
+      lesson.sequenceIndex
+    );
+
+    if (nextLesson) {
+      const nextLessonProgress = await this.repo.findLessonProgressByLessonId(
+        character.id,
+        nextLesson.id
+      );
+      if (nextLessonProgress) {
+        await this.repo.updateLessonProgress(nextLessonProgress.id, {
+          locked: false,
+        });
+      }
+    }
+
+    return updatedLp;
+  }
+
   public async updateLessonProgress(
     lessonProgressId: string,
     progress: number,
     authUser: UserPublic
   ) {
     const character = await this.findByUserId(authUser.id);
-    const lessonProgress = await this.repo.findLessonProgressById(
-      lessonProgressId
-    );
+    const lessonProgress =
+      await this.repo.findLessonProgressById(lessonProgressId);
 
     if (!lessonProgress || lessonProgress.characterId !== character.id) {
       throw new NotFoundError("Lesson progress not found");
     }
 
-    // Prepara os dados para uma única atualização
     const dataToUpdate: Partial<typeof lessonsProgress.$inferInsert> = {
       progress,
     };
@@ -73,13 +123,11 @@ export class CharacterService {
       dataToUpdate.completed = true;
     }
 
-    // Executa a atualização no banco
     const updatedLp = await this.repo.updateLessonProgress(
       lessonProgressId,
       dataToUpdate
     );
 
-    // Se a lição foi completada, desbloqueia a próxima
     if (updatedLp?.completed) {
       const currentLesson = await this.questRepo.findLessonById(
         lessonProgress.lessonId
@@ -90,7 +138,7 @@ export class CharacterService {
         currentLesson.questlineId,
         currentLesson.sequenceIndex
       );
-      if (!nextLesson) return updatedLp; // Última lição da questline
+      if (!nextLesson) return updatedLp;
 
       const nextLessonProgress = await this.repo.findLessonProgressByLessonId(
         character.id,
