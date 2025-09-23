@@ -1,7 +1,11 @@
-import { eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 import type { Db } from "../../db";
 import { characters } from "../../db/schemas/characters";
-import { lessons, lessonsProgress } from "../../db/schemas/questline";
+import {
+  lessons,
+  lessonsProgress,
+  questlines,
+} from "../../db/schemas/questline";
 import type { CharacterEntity } from "./character.entity";
 
 export class CharacterRepository {
@@ -16,7 +20,23 @@ export class CharacterRepository {
   }
 
   public async createInitialLessonProgress(characterId: string) {
-    const allLessons = await this.db.select().from(lessons);
+    const allLessons = await this.db
+      .select({
+        id: lessons.id,
+        questlineId: lessons.questlineId,
+        title: lessons.title,
+        description: lessons.description,
+        xp: lessons.xp,
+        difficulty: lessons.difficulty,
+        icon: lessons.icon,
+        content: lessons.content,
+        sequenceIndex: lessons.sequenceIndex,
+        createdAt: lessons.createdAt,
+      })
+      .from(lessons)
+      .innerJoin(questlines, eq(lessons.questlineId, questlines.id))
+      .orderBy(asc(questlines.createdAt), asc(lessons.sequenceIndex));
+
     if (!allLessons.length) {
       return;
     }
@@ -26,7 +46,7 @@ export class CharacterRepository {
       characterId,
       lessonId: lesson.id,
       completed: false,
-      locked: index !== 0, // Desbloqueia apenas a primeira lição
+      locked: index !== 0,
       progress: 0,
       createdAt: new Date(),
     }));
