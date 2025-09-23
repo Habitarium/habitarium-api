@@ -3,6 +3,7 @@ import { zodValidator } from "../utils/hooks/zod-validator";
 import { updateCharacterSchema } from "../modules/characters/character.entity";
 import { makeCharacterController } from "../modules/characters/character.factory";
 import { updateLessonProgressSchema } from "../modules/lessons/lesson.entity";
+import { completeLessonSchema } from "../modules/characters/character.validator";
 
 const characterController = makeCharacterController();
 
@@ -10,6 +11,16 @@ export async function characterRoutes(app: FastifyInstance) {
   app.get("/me", async (req, reply) => {
     await characterController.findMe(req, reply);
   });
+
+  app.post(
+    "/me/lessons-progress",
+    {
+      preHandler: [zodValidator(completeLessonSchema)],
+    },
+    async (req, reply) => {
+      await characterController.completeLesson(req, reply);
+    }
+  );
 
   app.get("/me/lessons-progress", async (req, reply) => {
     await characterController.findLessonProgress(req, reply);
