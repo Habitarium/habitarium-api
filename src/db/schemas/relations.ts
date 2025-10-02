@@ -2,9 +2,11 @@ import { relations } from "drizzle-orm";
 import { characters } from "./characters";
 import { notifications } from "./notifications";
 import { quests } from "./quests";
-import { lessons, lessonsProgress, questlines } from "./questline";
+import { questlines } from "./questline";
 import { users } from "./users";
 import { activities } from "./activities";
+import { lessons } from "./lessons";
+import { lessonsProgress } from "./lessons-progress";
 
 export const usersRelations = relations(users, ({ one }) => ({
   character: one(characters, {
