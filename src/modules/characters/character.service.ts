@@ -99,8 +99,6 @@ export class CharacterService {
       }
     }
 
-    // If there is no next lesson, the questline may be completed.
-    // Unlock first lesson of the next questline by sequenceIndex.
     if (!nextLesson) {
       const currentLessonFull = await this.questRepo.findLessonById(lessonId);
       if (currentLessonFull) {
@@ -231,7 +229,7 @@ export class CharacterService {
       nickname: user.name,
       currentQuestlineKey: "INITIAL",
       lastQuestCompletedAt: new Date(),
-      level: 0,
+      level: 1,
       totalXp: 0,
       currentStreak: 0,
       longestStreak: 0,
