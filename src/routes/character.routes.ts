@@ -8,6 +8,10 @@ import { completeLessonSchema } from "../modules/characters/character.validator"
 const characterController = makeCharacterController();
 
 export async function characterRoutes(app: FastifyInstance) {
+  app.get("/ranking", async (req, reply) => {
+    await characterController.getRanking(req, reply);
+  });
+
   app.get("/me", async (req, reply) => {
     await characterController.findMe(req, reply);
   });
