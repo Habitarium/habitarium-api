@@ -5,7 +5,11 @@ import {
   NotFoundError,
 } from "../../utils/error-handler";
 import type { UserPublic } from "../users/user.entity";
-import type { CharacterEntity, UpdateCharacterInput } from "./character.entity";
+import type {
+  CharacterEntity,
+  CharacterPublic,
+  UpdateCharacterInput,
+} from "./character.entity";
 import type { CharacterRepository } from "./character.repository";
 import type { QuestRepository } from "../quests/quest.repository";
 import type { lessonsProgress } from "../../db/schemas/lessons-progress";
@@ -18,6 +22,11 @@ export class CharacterService {
 
   private getRequiredXp(level: number): number {
     return Math.floor(50 * Math.pow(level, 1.5));
+  }
+
+  public async getRanking(): Promise<CharacterPublic[]> {
+    const ranking = await this.repo.findRanking();
+    return ranking;
   }
 
   public async findAll(): Promise<CharacterEntity[]> {
