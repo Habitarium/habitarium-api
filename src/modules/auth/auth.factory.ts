@@ -12,7 +12,10 @@ export function makeAuthController() {
   const userRepository = new UserRepository(db);
   const characterRepository = new CharacterRepository(db);
   const questRepository = new QuestRepository(db);
-  const characterService = new CharacterService(characterRepository, questRepository);
+  const characterService = new CharacterService(
+    characterRepository,
+    questRepository,
+  );
   const userService = new UserService(userRepository, characterService);
   const service = new AuthService(userRepository, userService);
   const supabaseService = new SupabaseAuthService(userRepository, userService);

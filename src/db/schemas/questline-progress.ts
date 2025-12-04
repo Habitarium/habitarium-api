@@ -18,5 +18,5 @@ export const questlineProgress = pgTable(
     return {
       pk: primaryKey({ columns: [table.characterId, table.questlineId] }),
     };
-  }
+  },
 );

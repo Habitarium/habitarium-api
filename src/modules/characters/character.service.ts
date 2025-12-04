@@ -17,7 +17,7 @@ import type { lessonsProgress } from "../../db/schemas/lessons-progress";
 export class CharacterService {
   constructor(
     private readonly repo: CharacterRepository,
-    private readonly questRepo: QuestRepository
+    private readonly questRepo: QuestRepository,
   ) {}
 
   private getRequiredXp(level: number): number {
@@ -64,7 +64,7 @@ export class CharacterService {
     const character = await this.findByUserId(authUser.id);
     const lessonProgress = await this.repo.findLessonProgressByLessonId(
       character.id,
-      lessonId
+      lessonId,
     );
 
     if (!lessonProgress) {
@@ -93,13 +93,13 @@ export class CharacterService {
 
     const nextLesson = await this.questRepo.findNextLesson(
       lesson.questlineId,
-      lesson.sequenceIndex
+      lesson.sequenceIndex,
     );
 
     if (nextLesson) {
       const nextLessonProgress = await this.repo.findLessonProgressByLessonId(
         character.id,
-        nextLesson.id
+        nextLesson.id,
       );
       if (nextLessonProgress) {
         await this.repo.updateLessonProgress(nextLessonProgress.id, {
@@ -112,22 +112,22 @@ export class CharacterService {
       const currentLessonFull = await this.questRepo.findLessonById(lessonId);
       if (currentLessonFull) {
         const currentQuestline = await this.questRepo.findQuestlineById(
-          currentLessonFull.questlineId
+          currentLessonFull.questlineId,
         );
         if (currentQuestline) {
           const nextQuestline =
             await this.questRepo.findQuestlineBySequenceIndex(
-              currentQuestline.sequenceIndex + 1
+              currentQuestline.sequenceIndex + 1,
             );
           if (nextQuestline) {
             const firstLessonNext = await this.questRepo.findFirstLesson(
-              nextQuestline.id
+              nextQuestline.id,
             );
             if (firstLessonNext) {
               const firstLessonProgress =
                 await this.repo.findLessonProgressByLessonId(
                   character.id,
-                  firstLessonNext.id
+                  firstLessonNext.id,
                 );
               if (firstLessonProgress) {
                 await this.repo.updateLessonProgress(firstLessonProgress.id, {
@@ -146,7 +146,7 @@ export class CharacterService {
   public async updateLessonProgress(
     lessonProgressId: string,
     progress: number,
-    authUser: UserPublic
+    authUser: UserPublic,
   ) {
     const character = await this.findByUserId(authUser.id);
     const lessonProgress =
@@ -166,24 +166,24 @@ export class CharacterService {
 
     const updatedLp = await this.repo.updateLessonProgress(
       lessonProgressId,
-      dataToUpdate
+      dataToUpdate,
     );
 
     if (updatedLp?.completed) {
       const currentLesson = await this.questRepo.findLessonById(
-        lessonProgress.lessonId
+        lessonProgress.lessonId,
       );
       if (!currentLesson) return updatedLp;
 
       const nextLesson = await this.questRepo.findNextLesson(
         currentLesson.questlineId,
-        currentLesson.sequenceIndex
+        currentLesson.sequenceIndex,
       );
       if (!nextLesson) return updatedLp;
 
       const nextLessonProgress = await this.repo.findLessonProgressByLessonId(
         character.id,
-        nextLesson.id
+        nextLesson.id,
       );
       if (!nextLessonProgress) return updatedLp;
 
@@ -197,7 +197,7 @@ export class CharacterService {
 
   public async addExperienceCharacter(
     xp: number,
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<CharacterEntity> {
     const found = await this.findByUserId(authUser.id);
 
@@ -261,7 +261,7 @@ export class CharacterService {
 
   public async delete(
     characterId: string,
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<void> {
     const character = await this.findById(characterId);
 
@@ -280,7 +280,7 @@ export class CharacterService {
   public async update(
     characterId: string,
     data: UpdateCharacterInput,
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<CharacterEntity> {
     const character = await this.repo.findById(characterId);
     if (!character) {

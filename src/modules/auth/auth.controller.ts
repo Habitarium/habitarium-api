@@ -14,12 +14,12 @@ import { AuthRequiredError } from "../../utils/error-handler";
 export class AuthController {
   constructor(
     private readonly service: AuthService,
-    private readonly supabaseService: SupabaseAuthService
+    private readonly supabaseService: SupabaseAuthService,
   ) {}
 
   public async signUp(
     req: FastifyRequest,
-    reply: FastifyReply
+    reply: FastifyReply,
   ): Promise<AuthResponse> {
     const data = req.body as CreateUserInput;
     const auth = await this.service.signUp(data);
@@ -28,7 +28,7 @@ export class AuthController {
 
   public async signIn(
     req: FastifyRequest,
-    reply: FastifyReply
+    reply: FastifyReply,
   ): Promise<AuthResponse> {
     const data = req.body as SignInInput;
     const auth = await this.service.signIn(data);
@@ -46,13 +46,13 @@ export class AuthController {
 
   public async supabaseLogin(
     req: FastifyRequest,
-    reply: FastifyReply
+    reply: FastifyReply,
   ): Promise<SupabaseLoginResponse> {
     const { provider } = req.params as { provider: SupportedProvider };
 
     if (!provider || !["google", "facebook", "github"].includes(provider)) {
       throw new AuthRequiredError(
-        "Provider must be google, facebook, or github"
+        "Provider must be google, facebook, or github",
       );
     }
 
@@ -62,7 +62,7 @@ export class AuthController {
 
   public async supabaseCallback(
     req: FastifyRequest,
-    reply: FastifyReply
+    reply: FastifyReply,
   ): Promise<SupabaseAuthResponse> {
     const data = req.query as SupabaseCallbackData;
     const auth = await this.supabaseService.handleCallback(data);

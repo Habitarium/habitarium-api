@@ -217,7 +217,7 @@ export function zodIssues(zerr: ZodError): Issue[] {
 export class ValidationError extends BadRequestError {
   constructor(
     message = "Validation failed",
-    opts: AppErrorOptions & { issues?: Issue[] } = {}
+    opts: AppErrorOptions & { issues?: Issue[] } = {},
   ) {
     super(message, {
       ...opts,
@@ -249,7 +249,7 @@ export class DatabaseError extends AppError {
 
   static fromUnknown(
     err: unknown,
-    fallbackMessage = "Database error"
+    fallbackMessage = "Database error",
   ): AppError {
     const anyErr = err as any;
     if (anyErr?.code === "23505") {
@@ -279,12 +279,12 @@ export function toAppError(err: unknown, fallback?: string): AppError {
 
 export function serializeError(
   err: AppError | unknown,
-  opts?: { includeStack?: boolean; includeCause?: boolean }
+  opts?: { includeStack?: boolean; includeCause?: boolean },
 ) {
   const appErr = toAppError(err);
   return appErr.toJSON(
     opts?.includeStack ?? false,
-    opts?.includeCause ?? false
+    opts?.includeCause ?? false,
   );
 }
 
@@ -299,7 +299,7 @@ export function sendError(reply: import("fastify").FastifyReply, err: unknown) {
 export function fastifyErrorHandler(
   err: FastifyError,
   req: FastifyRequest,
-  reply: FastifyReply
+  reply: FastifyReply,
 ) {
   req.log.error({ err }, "Unhandled error");
   console.error(err);

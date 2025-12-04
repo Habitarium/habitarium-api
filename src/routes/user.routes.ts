@@ -21,7 +21,7 @@ export async function userRoutes(app: FastifyInstance) {
     },
     async (req, reply) => {
       await userController.update(req, reply);
-    }
+    },
   );
 
   app.delete("/me", async (req, reply) => {

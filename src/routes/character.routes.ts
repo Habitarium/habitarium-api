@@ -23,7 +23,7 @@ export async function characterRoutes(app: FastifyInstance) {
     },
     async (req, reply) => {
       await characterController.completeLesson(req, reply);
-    }
+    },
   );
 
   app.get("/me/lessons-progress", async (req, reply) => {
@@ -37,7 +37,7 @@ export async function characterRoutes(app: FastifyInstance) {
     },
     async (req, reply) => {
       await characterController.updateLessonProgress(req, reply);
-    }
+    },
   );
 
   app.get("/user/:userId", async (req, reply) => {
@@ -55,6 +55,6 @@ export async function characterRoutes(app: FastifyInstance) {
     },
     async (req, reply) => {
       await characterController.update(req, reply);
-    }
+    },
   );
 }

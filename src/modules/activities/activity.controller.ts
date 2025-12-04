@@ -15,7 +15,7 @@ export class ActivityController {
     }
     const activities = await this.service.getActivitiesBetweenDates(
       dateRangeResult.data,
-      authUser
+      authUser,
     );
     return reply.status(200).send(activities);
   }

@@ -49,7 +49,7 @@ export class QuestController {
 
   public async findQuestsByQuestline(
     _req: FastifyRequest,
-    reply: FastifyReply
+    reply: FastifyReply,
   ) {
     const questlines = await this.service.findQuestlinesWithLessons();
     return reply.status(200).send(questlines);

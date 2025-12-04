@@ -62,7 +62,7 @@ export class CharacterRepository {
 
   public async findLessonProgressByLessonId(
     characterId: string,
-    lessonId: string
+    lessonId: string,
   ) {
     const [result] = await this.db
       .select()
@@ -70,15 +70,15 @@ export class CharacterRepository {
       .where(
         and(
           eq(lessonsProgress.characterId, characterId),
-          eq(lessonsProgress.lessonId, lessonId)
-        )
+          eq(lessonsProgress.lessonId, lessonId),
+        ),
       );
     return result;
   }
 
   public async updateLessonProgress(
     id: string,
-    data: Partial<typeof lessonsProgress.$inferInsert>
+    data: Partial<typeof lessonsProgress.$inferInsert>,
   ) {
     const [result] = await this.db
       .update(lessonsProgress)
@@ -89,7 +89,7 @@ export class CharacterRepository {
   }
 
   public async findById(
-    characterId: string
+    characterId: string,
   ): Promise<CharacterEntity | undefined> {
     const [result] = await this.db
       .select()
@@ -99,7 +99,7 @@ export class CharacterRepository {
   }
 
   public async findByUserId(
-    userId: string
+    userId: string,
   ): Promise<CharacterEntity | undefined> {
     const [result] = await this.db
       .select()
@@ -132,7 +132,7 @@ export class CharacterRepository {
   }
 
   public async update(
-    data: CharacterEntity
+    data: CharacterEntity,
   ): Promise<CharacterEntity | undefined> {
     const [result] = await this.db
       .update(characters)
@@ -151,7 +151,7 @@ export class CharacterRepository {
   }
 
   public async create(
-    data: CharacterEntity
+    data: CharacterEntity,
   ): Promise<CharacterEntity | undefined> {
     const [result] = await this.db.insert(characters).values(data).returning();
     return result;

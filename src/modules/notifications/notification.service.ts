@@ -15,7 +15,7 @@ import type { NotificationRepository } from "./notification.repository";
 export class NotificationService {
   constructor(
     private readonly repo: NotificationRepository,
-    private readonly characterService: CharacterService
+    private readonly characterService: CharacterService,
   ) {}
 
   public async findAll(authUser: UserPublic): Promise<NotificationEntity[]> {
@@ -26,7 +26,7 @@ export class NotificationService {
 
   public async findById(
     notificationId: string,
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<NotificationEntity> {
     const character = await this.characterService.findByUserId(authUser.id);
     const notification = await this.repo.findById(notificationId);
@@ -45,7 +45,7 @@ export class NotificationService {
 
   public async create(
     data: CreateNotificationInput,
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<NotificationEntity> {
     const character = await this.characterService.findByUserId(authUser.id);
 
@@ -71,11 +71,11 @@ export class NotificationService {
   public async update(
     notificationId: string,
     data: UpdateNotificationInput,
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<NotificationEntity> {
     if (notificationId !== data.id) {
       throw new ForbiddenError(
-        "You are not allowed to update this notification"
+        "You are not allowed to update this notification",
       );
     }
 
@@ -95,7 +95,7 @@ export class NotificationService {
 
   public async delete(
     notificationId: string,
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<void> {
     await this.findById(notificationId, authUser);
 

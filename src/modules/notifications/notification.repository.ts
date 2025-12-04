@@ -15,7 +15,7 @@ export class NotificationRepository {
   }
 
   public async findById(
-    notificationId: string
+    notificationId: string,
   ): Promise<NotificationEntity | undefined> {
     const [result] = await this.db
       .select()
@@ -25,7 +25,7 @@ export class NotificationRepository {
   }
 
   public async create(
-    data: NotificationEntity
+    data: NotificationEntity,
   ): Promise<NotificationEntity | undefined> {
     const [result] = await this.db
       .insert(notifications)
@@ -35,7 +35,7 @@ export class NotificationRepository {
   }
 
   public async update(
-    data: NotificationEntity
+    data: NotificationEntity,
   ): Promise<NotificationEntity | undefined> {
     const [result] = await this.db
       .update(notifications)

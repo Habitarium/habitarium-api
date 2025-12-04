@@ -16,7 +16,7 @@ export class ActivityRepository {
 
   public async getActivitiesBetweenDates(
     data: { startAt: Date; endAt: Date },
-    characterId: string
+    characterId: string,
   ): Promise<ActivityEntity[]> {
     const result = await this.db
       .select()
@@ -25,14 +25,14 @@ export class ActivityRepository {
         and(
           eq(activities.characterId, characterId),
           gte(activities.closedAt, data.startAt),
-          lte(activities.closedAt, data.endAt)
-        )
+          lte(activities.closedAt, data.endAt),
+        ),
       );
     return result;
   }
 
   public async findById(
-    activityId: string
+    activityId: string,
   ): Promise<ActivityEntity | undefined> {
     const [result] = await this.db
       .select()
@@ -42,14 +42,14 @@ export class ActivityRepository {
   }
 
   public async create(
-    data: ActivityEntity
+    data: ActivityEntity,
   ): Promise<ActivityEntity | undefined> {
     const [result] = await this.db.insert(activities).values(data).returning();
     return result;
   }
 
   public async update(
-    data: ActivityEntity
+    data: ActivityEntity,
   ): Promise<ActivityEntity | undefined> {
     const [result] = await this.db
       .update(activities)

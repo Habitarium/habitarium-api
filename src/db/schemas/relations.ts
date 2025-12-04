@@ -73,5 +73,5 @@ export const lessonsProgressRelations = relations(
       fields: [lessonsProgress.characterId],
       references: [characters.id],
     }),
-  })
+  }),
 );

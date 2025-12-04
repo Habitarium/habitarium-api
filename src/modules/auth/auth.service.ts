@@ -9,7 +9,7 @@ import type { AuthResponse, SignInInput } from "./auth.entity";
 export class AuthService {
   constructor(
     private readonly userRepo: UserRepository,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {}
 
   public async signUp(data: CreateUserInput): Promise<AuthResponse> {

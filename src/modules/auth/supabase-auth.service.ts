@@ -28,7 +28,7 @@ export class SupabaseAuthService {
 
   constructor(
     private readonly userRepo: UserRepository,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     const supabaseUrl = process.env.SUPABASE_URL;
     const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
@@ -41,7 +41,7 @@ export class SupabaseAuthService {
   }
 
   public async getLoginUrl(
-    provider: SupportedProvider
+    provider: SupportedProvider,
   ): Promise<SupabaseLoginResponse> {
     const { data, error } = await this.supabase.auth.signInWithOAuth({
       provider,
@@ -59,7 +59,7 @@ export class SupabaseAuthService {
 
   public async handleCallback(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _callbackData: SupabaseCallbackData
+    _callbackData: SupabaseCallbackData,
   ): Promise<SupabaseAuthResponse> {
     const { data, error } = await this.supabase.auth.getSession();
 
@@ -77,7 +77,7 @@ export class SupabaseAuthService {
 
     if (!user) {
       const provider = this.detectProviderFromMetadata(
-        supabaseUser.user_metadata
+        supabaseUser.user_metadata,
       );
       const newUser: UserEntity = {
         id: crypto.randomUUID(),
@@ -100,7 +100,7 @@ export class SupabaseAuthService {
       user = await this.userRepo.findById(created.id);
     } else {
       const provider = this.detectProviderFromMetadata(
-        supabaseUser.user_metadata
+        supabaseUser.user_metadata,
       );
       if (user.provider !== provider) {
         const updatedUser: UserEntity = {
@@ -153,7 +153,7 @@ export class SupabaseAuthService {
   }
 
   private detectProviderFromMetadata(
-    metadata: Record<string, unknown>
+    metadata: Record<string, unknown>,
   ): "google" | "facebook" | "github" {
     if (metadata?.provider && typeof metadata.provider === "string") {
       const provider = metadata.provider.toLowerCase();

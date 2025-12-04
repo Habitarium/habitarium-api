@@ -52,7 +52,7 @@ export async function questRoutes(app: FastifyInstance) {
     },
     async (req, reply) => {
       await questController.create(req, reply);
-    }
+    },
   );
 
   app.put(
@@ -62,7 +62,7 @@ export async function questRoutes(app: FastifyInstance) {
     },
     async (req, reply) => {
       await questController.update(req, reply);
-    }
+    },
   );
 
   app.delete("/:questId", async (req, reply) => {

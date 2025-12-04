@@ -18,7 +18,7 @@ export class NotificationController {
     const notification = await this.service.update(
       notificationId,
       data,
-      authUser
+      authUser,
     );
     return reply.status(200).send(notification);
   }

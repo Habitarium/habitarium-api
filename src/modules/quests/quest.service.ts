@@ -17,11 +17,11 @@ export class QuestService {
   constructor(
     private readonly repo: QuestRepository,
     private readonly characterService: CharacterService,
-    private readonly activityService: ActivityService
+    private readonly activityService: ActivityService,
   ) {}
 
   public async findQuestsByCharacter(
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<QuestEntity[]> {
     const character = await this.characterService.findByUserId(authUser.id);
     const quests = await this.repo.findQuestsByCharacter(character.id);
@@ -41,7 +41,7 @@ export class QuestService {
 
   public async findById(
     questId: string,
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<QuestEntity> {
     const character = await this.characterService.findByUserId(authUser.id);
     const quest = await this.repo.findById(questId);
@@ -60,7 +60,7 @@ export class QuestService {
 
   public async findByParentId(
     questId: string,
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<QuestEntity[]> {
     await this.findById(questId, authUser);
     const quests = await this.repo.findChildQuests(questId);
@@ -69,7 +69,7 @@ export class QuestService {
 
   public async create(
     data: CreateQuestInput,
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<QuestEntity> {
     const character = await this.characterService.findByUserId(authUser.id);
 
@@ -99,7 +99,7 @@ export class QuestService {
 
     await this.activityService.create(
       { questId: quest.id, closedAt: quest.dueDate },
-      authUser
+      authUser,
     );
 
     return quest;
@@ -108,7 +108,7 @@ export class QuestService {
   public async update(
     questId: string,
     data: UpdateQuestInput,
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<QuestEntity> {
     const found = await this.findById(questId, authUser);
     const updatedQuest: QuestEntity = {

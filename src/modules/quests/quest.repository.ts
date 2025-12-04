@@ -9,7 +9,7 @@ export class QuestRepository {
   constructor(private readonly db: Db) {}
 
   public async findQuestsByCharacter(
-    characterId: string
+    characterId: string,
   ): Promise<QuestEntity[]> {
     const result = await this.db
       .select()
@@ -68,8 +68,8 @@ export class QuestRepository {
       .where(
         and(
           eq(lessons.questlineId, questlineId),
-          eq(lessons.sequenceIndex, sequenceIndex + 1)
-        )
+          eq(lessons.sequenceIndex, sequenceIndex + 1),
+        ),
       );
     return lesson;
   }

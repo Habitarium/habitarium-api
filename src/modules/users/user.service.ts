@@ -19,12 +19,12 @@ import type { UserRepository } from "./user.repository";
 export class UserService {
   constructor(
     private readonly repo: UserRepository,
-    private readonly characterService: CharacterService
+    private readonly characterService: CharacterService,
   ) {}
 
   public async findById(
     userId: string,
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<UserPublic> {
     if (userId !== authUser.id) {
       throw new ForbiddenError("You are not allowed to get this user");
@@ -68,7 +68,7 @@ export class UserService {
   public async update(
     userId: string,
     data: UpdateUserInput,
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<UserPublic> {
     if (userId !== authUser.id) {
       throw new ForbiddenError("You are not allowed to update this user");

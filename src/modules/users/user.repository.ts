@@ -38,7 +38,7 @@ export class UserRepository {
   }
 
   public async findByEmailPublic(
-    email: string
+    email: string,
   ): Promise<UserPublic | undefined> {
     const [result] = await this.db
       .select({

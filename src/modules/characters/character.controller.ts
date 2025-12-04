@@ -46,7 +46,7 @@ export class CharacterController {
     const result = await this.service.updateLessonProgress(
       lessonProgressId,
       progress,
-      authUser
+      authUser,
     );
     return reply.status(200).send(result);
   }

@@ -12,7 +12,7 @@ export function makeUserController() {
   const questRepository = new QuestRepository(db);
   const characterService = new CharacterService(
     characterRepository,
-    questRepository
+    questRepository,
   );
   const service = new UserService(repo, characterService);
   return new UserController(service);

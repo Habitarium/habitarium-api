@@ -12,7 +12,7 @@ export async function authRoutes(app: FastifyInstance) {
     { preHandler: [zodValidator(signInSchema)] },
     async (req, reply) => {
       await authController.signIn(req, reply);
-    }
+    },
   );
 
   app.post(
@@ -20,7 +20,7 @@ export async function authRoutes(app: FastifyInstance) {
     { preHandler: [zodValidator(createUserSchema)] },
     async (req, reply) => {
       await authController.signUp(req, reply);
-    }
+    },
   );
 
   app.get("/verify-token", async (req, reply) => {

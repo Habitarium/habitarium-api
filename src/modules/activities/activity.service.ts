@@ -14,7 +14,7 @@ export class ActivityService {
   constructor(
     private readonly repo: ActivityRepository,
     private readonly characterService: CharacterService,
-    private readonly questServiceFactory: () => QuestService
+    private readonly questServiceFactory: () => QuestService,
   ) {}
 
   private get questService(): QuestService {
@@ -32,7 +32,7 @@ export class ActivityService {
 
   public async findById(
     activityId: string,
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<ActivityEntity> {
     const character = await this.characterService.findByUserId(authUser.id);
     const activity = await this.repo.findById(activityId);
@@ -54,7 +54,7 @@ export class ActivityService {
 
   public async getActivitiesBetweenDates(
     range: { startAt: Date; endAt: Date },
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<ActivityWithVirtual[]> {
     const character = await this.characterService.findById(authUser.id);
 
@@ -65,14 +65,14 @@ export class ActivityService {
 
     const activitiesFromDatabase = await this.repo.getActivitiesBetweenDates(
       range,
-      character.id
+      character.id,
     );
 
     const activitiesResult: ActivityWithVirtual[] = [];
 
     const startOfDayUTC = (date: Date) => {
       return new Date(
-        Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
+        Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
       );
     };
 
@@ -85,7 +85,7 @@ export class ActivityService {
         const existingActivity = activitiesFromDatabase.find(
           (activity) =>
             activity.questId === quest.id &&
-            startOfDayUTC(activity.createdAt) === currentDate
+            startOfDayUTC(activity.createdAt) === currentDate,
         );
 
         if (existingActivity) {
@@ -114,7 +114,7 @@ export class ActivityService {
 
   public async create(
     data: { questId: string; closedAt: Date },
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<ActivityEntity> {
     const character = await this.characterService.findByUserId(authUser.id);
 
@@ -141,7 +141,7 @@ export class ActivityService {
 
   public async complete(
     activityId: string,
-    authUser: UserPublic
+    authUser: UserPublic,
   ): Promise<ActivityEntity> {
     const found = await this.findById(activityId, authUser);
 
@@ -166,7 +166,7 @@ export class ActivityService {
 
     await this.characterService.addExperienceCharacter(
       found.xpEarned,
-      authUser
+      authUser,
     );
 
     return quest;

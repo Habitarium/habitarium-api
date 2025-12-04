@@ -17,6 +17,6 @@ export async function notificationRoutes(app: FastifyInstance) {
     },
     async (req, reply) => {
       await notificationController.update(req, reply);
-    }
+    },
   );
 }
