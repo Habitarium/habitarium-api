@@ -1,0 +1,77 @@
+name: Habitarium API
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Create .env.test file
+        run: |
+          echo "JWT_SECRET=secret" >> .env
+          echo "REFRESH_TOKEN_SECRET=secret2" >> .env
+          echo "NEONDB_URL=postgresql://test:test@localhost:5432/test" >> .env
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: ESLint
+        run: npx eslint .
+
+      - name: Prettier
+        run: npx prettier --check .
+
+  migrate:
+    runs-on: ubuntu-latest
+    needs: check
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_NEONDB_URL: ${{ secrets.NEONDB_URL }}
+          envkey_JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          envkey_REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
+          envkey_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          envkey_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          envkey_API_PORT: ${{ secrets.API_PORT }}
+          envkey_API_HOST: ${{ secrets.API_HOST }}
+          envkey_FRONT_HOST: ${{ secrets.FRONT_HOST }}
+          envkey_API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          envkey_FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
+
+      - name: Run migrations
+        run: npx drizzle-kit push
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: migrate
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Production
+        run: curl "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
