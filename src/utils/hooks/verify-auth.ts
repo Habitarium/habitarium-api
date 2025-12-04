@@ -19,7 +19,7 @@ declare module "fastify" {
 export function verifyAuth(
   req: FastifyRequest,
   _reply: FastifyReply,
-  done: HookHandlerDoneFunction,
+  done: HookHandlerDoneFunction
 ) {
   if (req.routeOptions.config?.isPublic) {
     return done();
@@ -35,6 +35,7 @@ export function verifyAuth(
       id: payload.id,
       name: payload.name,
       email: payload.email,
+      provider: payload.provider,
       createdAt: payload.createdAt,
       updatedAt: payload.updatedAt,
     };
